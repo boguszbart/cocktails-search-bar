@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext, useCallback } from 'react'
 
 const url = 'https://www.thecocktaildb.com/api/json/v1/1/search.php?s='
 
@@ -23,17 +23,18 @@ const CocktailsContext = React.createContext<cocktailsContext>({
 const CocktailsContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [cocktails, setCocktails] = useState<cocktail[]>([])
-  const [filteredValue, setFilteredValue] = useState<string>('')
+  const [filteredValue, setFilteredValue] = useState<string>('a')
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     setIsLoading(true)
     try {
-      const response = await fetch(url)
+      const response = await fetch(`${url}${filteredValue}`)
       if (!response.ok) {
         throw new Error()
       }
       const data = await response.json()
-      data.drinks.sort(function (a: { strDrink: string }, b: { strDrink: string }) {
+      const { drinks } = data
+      drinks.sort(function (a: { strDrink: string }, b: { strDrink: string }) {
         if (a.strDrink < b.strDrink) {
           return -1
         }
@@ -42,21 +43,35 @@ const CocktailsContextProvider = ({ children }: { children: React.ReactNode }) =
         }
         return 0
       })
-      setCocktails(data.drinks)
+      if (drinks) {
+        const newCocktails = drinks.map((item: cocktail) => {
+          const { idDrink, strDrink, strDrinkThumb, strAlcoholic, strGlass } = item
+
+          return {
+            id: idDrink,
+            name: strDrink,
+            image: strDrinkThumb,
+            info: strAlcoholic,
+            glass: strGlass,
+          }
+        })
+        setCocktails(newCocktails)
+      } else {
+        setCocktails([])
+      }
     } catch (err: any) {
       console.log(err.message)
     }
     setIsLoading(false)
-  }
+  }, [filteredValue])
 
   const filterCocktails = (text: string) => {
     setFilteredValue(text)
-    console.log(filteredValue)
   }
-  console.log(cocktails)
+
   useEffect(() => {
     fetchData()
-  }, [])
+  }, [filteredValue, fetchData])
 
   const contextValue: cocktailsContext = {
     isLoading,

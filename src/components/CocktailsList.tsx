@@ -5,28 +5,32 @@ import Cocktail from './CocktailItem'
 const CocktailsList = () => {
   const { cocktails, isLoading } = useGlobalContext()
 
+  if (isLoading) {
+    return <div className='loader'></div>
+  }
+
+  if (cocktails.length < 1) {
+    return <h2 className='section-title'>no cocktails matched your search criteria</h2>
+  }
+
   const cocktailsShowcase = cocktails.map(cocktail => {
+    console.log(cocktail)
     return (
       <Cocktail
-        key={cocktail.idDrink}
-        id={cocktail.idDrink}
-        img={cocktail.strDrinkThumb}
-        drinkName={cocktail.strDrink}
-        drinkGlass={cocktail.strGlass}
-        drinkAlcoholic={cocktail.strAlcoholic}
+        key={cocktail.id}
+        id={cocktail.id}
+        img={cocktail.image}
+        drinkName={cocktail.name}
+        drinkGlass={cocktail.glass}
+        drinkAlcoholic={cocktail.info}
       />
     )
   })
 
   return (
     <div className='section'>
-      {isLoading && <div className='loader'></div>}
-      {!isLoading && (
-        <>
-          <h1 className='section-title'>Cocktails</h1>
-          <div className='cocktails-center'>{cocktailsShowcase}</div>
-        </>
-      )}
+      <h1 className='section-title'>Cocktails</h1>
+      <div className='cocktails-center'>{cocktailsShowcase}</div>
     </div>
   )
 }

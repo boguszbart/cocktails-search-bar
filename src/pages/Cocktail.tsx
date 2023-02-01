@@ -7,8 +7,9 @@ const Cocktail = () => {
   const params = useParams()
   const { cocktails } = useGlobalContext()
 
-  const filteredCocktail = cocktails.filter(cocktail => cocktail.idDrink === params.cocktailId)
-  console.log(filteredCocktail)
+
+
+  const filteredCocktail = cocktails.filter(cocktail => cocktail.id === params.cocktailId)
   const {
     strDrink,
     strDrinkThumb,
@@ -23,6 +24,10 @@ const Cocktail = () => {
     strIngredient5,
   } = filteredCocktail[0]
   const ingredients = [strIngredient1, strIngredient2, strIngredient3, strIngredient4, strIngredient5]
+
+  if (!filteredCocktail) {
+    return <h2 className='section-title'>No such coctail</h2>
+  }
 
   return (
     <section className='section cocktail-section'>

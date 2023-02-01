@@ -4,7 +4,6 @@ import { useGlobalContext } from '../store/CocktailsContext'
 const SearchForm = () => {
   const {filterCocktails}= useGlobalContext()
 
-
   return (
     <section className='section search'>
       <div className='search-form'>
