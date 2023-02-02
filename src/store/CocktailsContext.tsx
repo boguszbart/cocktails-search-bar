@@ -30,20 +30,20 @@ const CocktailsContextProvider = ({ children }: { children: React.ReactNode }) =
     try {
       const response = await fetch(`${url}${filteredValue}`)
       if (!response.ok) {
-        throw new Error()
+        throw new Error('Something went wrong')
       }
       const data = await response.json()
       const { drinks } = data
-      drinks.sort(function (a: { strDrink: string }, b: { strDrink: string }) {
-        if (a.strDrink < b.strDrink) {
-          return -1
-        }
-        if (a.strDrink > b.strDrink) {
-          return 1
-        }
-        return 0
-      })
       if (drinks) {
+        drinks.sort(function (a: { strDrink: string }, b: { strDrink: string }) {
+          if (a.strDrink < b.strDrink) {
+            return -1
+          }
+          if (a.strDrink > b.strDrink) {
+            return 1
+          }
+          return 0
+        })
         const newCocktails = drinks.map((item: cocktail) => {
           const { idDrink, strDrink, strDrinkThumb, strAlcoholic, strGlass } = item
 
@@ -55,11 +55,12 @@ const CocktailsContextProvider = ({ children }: { children: React.ReactNode }) =
             glass: strGlass,
           }
         })
+
         setCocktails(newCocktails)
       } else {
         setCocktails([])
       }
-    } catch (err: any) {
+    } catch (err) {
       console.log(err.message)
     }
     setIsLoading(false)

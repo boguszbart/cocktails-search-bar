@@ -14,7 +14,6 @@ const CocktailsList = () => {
   }
 
   const cocktailsShowcase = cocktails.map(cocktail => {
-    console.log(cocktail)
     return (
       <Cocktail
         key={cocktail.id}
