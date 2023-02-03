@@ -4,7 +4,7 @@ import logo from '../logo.svg'
 
 const MainNavigation = () => {
   return (
-    <div className='navbar'>
+    <nav className='navbar'>
       <div className='nav-center'>
         <Link to=''>
           <img className='logo' src={logo} alt='' />
@@ -18,7 +18,7 @@ const MainNavigation = () => {
           </NavLink>
         </div>
       </div>
-    </div>
+    </nav>
   )
 }
 
