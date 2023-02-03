@@ -4,12 +4,10 @@ type cocktail = {
   drinks: [{ [key: string]: string }]
 }
 
-type fetchedData = cocktail
-
 const Cocktail = () => {
   //set data to an object of type cocktail
   const fetchedData: unknown = useLoaderData()
-  const cocktailData: fetchedData = fetchedData as fetchedData
+  const cocktailData: cocktail = fetchedData as cocktail
 
   if (cocktailData.drinks === null) {
     return (
